@@ -10,7 +10,7 @@ Books_Online/
 │   ├── main.py                    # Scraping d'une page produit
 │   ├── scrap_a_category.py        # Scraping d'une catégorie
 │   ├── scrap_all_products.py      # Scraping de tous les produits
-│   └── download_all_image.py      # Téléchargement des images
+│   └── download_all_images.py      # Téléchargement des images
 ├── data/
 │   ├── books.csv                  # Données extraites (généré)
 │   └── images/                    # Images téléchargées (généré)
