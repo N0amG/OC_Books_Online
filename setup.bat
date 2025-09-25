@@ -58,8 +58,8 @@ echo ✓ Dependances installees
 
 echo.
 echo [6/7] Creation des dossiers necessaires...
-if not exist "data" mkdir data
-if not exist "data\images" mkdir data\images
+if not exist "..\data" mkdir data
+if not exist "..\data\images" mkdir data\images
 echo ✓ Dossiers crees
 
 echo.
@@ -72,7 +72,7 @@ echo Scraping de tous les produits en cours...
 
 echo.
 echo [7/7] Execution scrap_all_products.py...
-python src\scrap_all_products.py
+echo python src\scrap_all_products.py
 if errorlevel 1 (
     echo ERREUR: Scraping echoue
     pause
@@ -90,7 +90,7 @@ echo Telechargement des images en cours...
 
 echo.
 echo [8/8] Execution download_all_images.py...
-python src\download_all_image.py
+python src\download_all_images.py
 if errorlevel 1 (
     echo ATTENTION: Telechargement des images partiellement echoue
     echo Les donnees CSV sont neanmoins disponibles
