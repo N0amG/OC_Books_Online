@@ -72,7 +72,7 @@ echo Scraping de tous les produits en cours...
 
 echo.
 echo [7/7] Execution scrap_all_products.py...
-echo python src\scrap_all_products.py
+python src\scrap_all_products.py
 if errorlevel 1 (
     echo ERREUR: Scraping echoue
     pause
