@@ -78,7 +78,7 @@ python src/scrap_all_products.py
 
 ### Télécharger toutes les images
 ```powershell
-python src/download_all_image.py
+python src/download_all_images.py
 ```
 
 ## Données extraites
