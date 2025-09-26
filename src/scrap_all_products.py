@@ -4,6 +4,7 @@ import csv
 from bs4 import BeautifulSoup
 from scrap_a_category import scrap_category
 
+
 def scrap_all_categories(base_url="https://books.toscrape.com/"):
     page = requests.get(base_url)
     page.raise_for_status()
@@ -18,6 +19,7 @@ def scrap_all_categories(base_url="https://books.toscrape.com/"):
         all_books.extend(scrap_category(category_url))
     return all_books
 
+
 def save_csv(rows, path="data/books.csv"):
     if not rows:
         return
@@ -26,5 +28,6 @@ def save_csv(rows, path="data/books.csv"):
         w = csv.DictWriter(f, fieldnames=fieldnames)
         w.writeheader()
         w.writerows(rows)
+
 
 save_csv(scrap_all_categories())

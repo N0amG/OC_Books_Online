@@ -1,6 +1,7 @@
 import requests
 import bs4
 
+
 def fetch_page(url):
     page = requests.get(url, timeout=10)
     page.raise_for_status()
@@ -114,7 +115,6 @@ def scrap_book(url):
         "image_url": image_url,
     }
     return result
-
 
 
 if "__main__" == __name__:
