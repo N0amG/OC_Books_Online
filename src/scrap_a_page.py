@@ -1,5 +1,6 @@
 import requests
 import bs4
+import re
 
 
 def fetch_page(url):
@@ -48,8 +49,6 @@ def scrap_book(url):
         if label in data_table:
             normalized[key] = data_table[label]
 
-    # Extraction du nombre disponible dans availability, ex: "In stock (19 available)"
-    import re
 
     number_available = None
     if "availability_raw" in normalized:

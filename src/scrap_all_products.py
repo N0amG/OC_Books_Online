@@ -1,5 +1,4 @@
 import requests
-import re
 import csv
 from bs4 import BeautifulSoup
 from scrap_a_category import scrap_category
