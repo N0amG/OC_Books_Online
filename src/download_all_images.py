@@ -24,13 +24,14 @@ def get_csv_image_urls(csv_file_path):
     return image_urls
 
 
-if __name__ == "__main__":
-    start = time.time()
-    csv_file_path = "data/books.csv"  # Chemin vers votre fichier CSV
-    image_urls = get_csv_image_urls(csv_file_path)
+start = time.time()
+csv_file_path = "data/books.csv"  # Chemin vers votre fichier CSV
+image_urls = get_csv_image_urls(csv_file_path)
 
-    for idx, image_url in enumerate(image_urls):
-        save_path = f"data/images/image_{idx + 1}.jpg"  # Nom de fichier pour sauvegarder l'image
-        download_image(image_url, save_path)
-    end = time.time()
-    print(f"Temps total d'exécution: {end - start} secondes")
+for idx, image_url in enumerate(image_urls):
+    save_path = (
+        f"data/images/image_{idx + 1}.jpg"  # Nom de fichier pour sauvegarder l'image
+    )
+    download_image(image_url, save_path)
+end = time.time()
+print(f"Temps total d'exécution: {end - start} secondes")

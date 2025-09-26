@@ -58,8 +58,8 @@ echo ✓ Dependances installees
 
 echo.
 echo [6/7] Creation des dossiers necessaires...
-if not exist "data" mkdir data
-if not exist "data\images" mkdir data\images
+if not exist "..\data" mkdir data
+if not exist "..\data\images" mkdir data\images
 echo ✓ Dossiers crees
 
 echo.
@@ -67,7 +67,7 @@ echo ==========================================
 echo     LANCEMENT DU SCRAPING COMPLET
 echo ==========================================
 echo.
-echo Cette etape va prendre environ 5-10 minutes...
+echo Cette etape va prendre environ 10 minutes...
 echo Scraping de tous les produits en cours...
 
 echo.
@@ -85,12 +85,12 @@ echo ==========================================
 echo     TELECHARGEMENT DES IMAGES
 echo ==========================================
 echo.
-echo Cette etape va prendre environ 2-5 minutes...
+echo Cette etape va prendre environ 10-12 minutes...
 echo Telechargement des images en cours...
 
 echo.
-echo [8/8] Execution download_all_image.py...
-python src\download_all_image.py
+echo [8/8] Execution download_all_images.py...
+python src\download_all_images.py
 if errorlevel 1 (
     echo ATTENTION: Telechargement des images partiellement echoue
     echo Les donnees CSV sont neanmoins disponibles
