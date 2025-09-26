@@ -3,6 +3,7 @@ import re
 from bs4 import BeautifulSoup
 from scrap_a_page import scrap_book
 
+
 def scrap_category(category_url):
     page = requests.get(category_url)
     page.raise_for_status()
@@ -29,7 +30,7 @@ def scrap_category(category_url):
             book_relative_url = h3.get("href")
             book_url = requests.compat.urljoin(category_url, book_relative_url)
             books_urls.append(book_url)
-            
+
     category_name = (
         re.search(r"books/(.*?)_(\d+)/index\.html", category_url)
         .group(1)
@@ -39,8 +40,3 @@ def scrap_category(category_url):
     print(f"Found {len(books_urls)} books in category '{category_name}'")
     all_books_data = [scrap_book(book_url) for book_url in books_urls]
     return all_books_data
-
-
-
-
-
