@@ -1,6 +1,7 @@
 import requests
 import bs4
 import re
+from urllib.parse import urljoin
 
 
 def fetch_page(url):
@@ -49,7 +50,6 @@ def scrap_book(url):
         if label in data_table:
             normalized[key] = data_table[label]
 
-
     number_available = None
     if "availability_raw" in normalized:
         avail_text = normalized["availability_raw"]
@@ -73,7 +73,7 @@ def scrap_book(url):
         if p:
             product_description = p.get_text(strip=True)
 
-    # Catégorie: dans le fil d'ariane (breadcrumb), la 3ème li > a (index -1 avant le livre)
+    # Catégorie: dans le chemin d'accès, la 3ème li > a (index -1 avant le livre)
     category = None
     breadcrumb_links = soup.select("ul.breadcrumb li a")
     # Structure: Home > Books > Category > Book Title (sans lien)
@@ -89,9 +89,6 @@ def scrap_book(url):
             if cls in rating_map:
                 review_rating = rating_map[cls]
                 break
-
-    # Image URL absolue
-    from urllib.parse import urljoin
 
     image_url = None
     img_tag = soup.select_one(
