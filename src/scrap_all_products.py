@@ -19,8 +19,7 @@ def scrap_all_categories(base_url="https://books.toscrape.com/"):
         scrap_category(category_url, (index + 1, len(category_urls)))
 
     # Afficher le temps écoulé en minutes et secondes
-    end = time.time()
-    duration = end - start
+    duration = time.time() - start
     minutes = int(duration // 60)
     seconds = duration % 60
     print(f"Scraping completed in {minutes}m {int(seconds)}s.")
