@@ -10,7 +10,7 @@ def fetch_page(url):
     page = requests.get(url, timeout=10)
     page.raise_for_status()
     # Forcer un encodage correct si pas détecté
-    if not page.encoding or page.encoding.lower() == "iso-8859-1":
+    if not page.encoding:
         page.encoding = page.apparent_encoding or "utf-8"
     text = page.text
     # Correction des artefacts courants de double-encodage 'Â£'
