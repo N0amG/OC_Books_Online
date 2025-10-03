@@ -4,32 +4,34 @@ from bs4 import BeautifulSoup
 from scrap_a_page import scrap_book
 
 
-def scrap_category(category_url):
+def scrap_category(category_url, progress=None):
     page = requests.get(category_url)
     page.raise_for_status()
     soup = BeautifulSoup(page.content, "html.parser")
     books_urls = []
-    page_count = soup.select_one("li.current")
-    if page_count:
-        page_count = page_count.get_text(strip=True)
-        _, _, total_pages = page_count.rpartition("of ")
-        total_pages = int(total_pages)
-
-        for page_num in range(1, total_pages + 1):
-            page_url = requests.compat.urljoin(category_url, f"page-{page_num}.html")
-            page = requests.get(page_url)
-            page.raise_for_status()
-            soup = BeautifulSoup(page.content, "html.parser")
-            for h3 in soup.select("h3 a"):
-                book_relative_url = h3.get("href")
-                book_url = requests.compat.urljoin(category_url, book_relative_url)
-                books_urls.append(book_url)
-
-    else:
+    current_url = category_url
+    
+    # Pagination basée sur le bouton "next"
+    while current_url:
+        # Scraper la page courante
+        page = requests.get(current_url)
+        page.raise_for_status()
+        soup = BeautifulSoup(page.content, "html.parser")
+        
+        # Extraire tous les liens de livres de cette page
         for h3 in soup.select("h3 a"):
             book_relative_url = h3.get("href")
-            book_url = requests.compat.urljoin(category_url, book_relative_url)
+            book_url = requests.compat.urljoin(current_url, book_relative_url)
             books_urls.append(book_url)
+        
+        # Chercher le bouton "next"
+        next_button = soup.select_one("li.next a")
+        if next_button and next_button.get("href"):
+            # Construire l'URL de la page suivante
+            current_url = requests.compat.urljoin(current_url, next_button["href"])
+        else:
+            # Plus de page suivante, on arrête
+            current_url = None
 
     category_name = (
         re.search(r"books/(.*?)_(\d+)/index\.html", category_url)
@@ -38,5 +40,8 @@ def scrap_category(category_url):
         .title()
     )
     print(f"Found {len(books_urls)} books in category '{category_name}'")
-    all_books_data = [scrap_book(book_url) for book_url in books_urls]
-    return all_books_data
+    for index, book_url in enumerate(books_urls):
+        scrap_book(book_url)
+        print(f"Saved {index + 1} / {len(books_urls)}")
+    if progress:
+        print(f"Category '{category_name}' completed ({progress[0]} / {progress[1]})")

@@ -1,8 +1,10 @@
 import requests
 import bs4
 import re
+import csv
 from urllib.parse import urljoin
-
+import os
+import time
 
 def fetch_page(url):
     page = requests.get(url, timeout=10)
@@ -33,8 +35,8 @@ def scrap_book(url):
         value_text = value_cell.get_text(separator=" ", strip=True)
         data_table[label] = value_text
 
-    # Mapping des libellés -> clés internes normalisées
-    mapping = {
+    # Association des libellés -> clés normalisées
+    keys = {
         "UPC": "universal_product_code",
         "Product Type": "product_type",
         "Price (excl. tax)": "price_excluding_tax",
@@ -46,7 +48,7 @@ def scrap_book(url):
 
     # Normalisation des données extraites
     normalized = {}
-    for label, key in mapping.items():
+    for label, key in keys.items():
         if label in data_table:
             normalized[key] = data_table[label]
 
@@ -110,10 +112,54 @@ def scrap_book(url):
         "review_rating": review_rating,
         "image_url": image_url,
     }
+    download_image(image_url)
+    save_book(result)
     return result
 
 
-if "__main__" == __name__:
-    url = "https://books.toscrape.com/catalogue/scott-pilgrims-precious-little-life-scott-pilgrim-1_987/index.html"
-    data = scrap_book(url)
-    [print(line) for line in data.items()]
+def save_book(book, path="data/books.csv"):
+    if not book:
+        return
+    
+    # Create directory if it doesn't exist
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    
+    # Check if file exists and is not empty before opening
+    write_header = not os.path.exists(path) or os.path.getsize(path) == 0
+    
+    fieldnames = list(book.keys())
+    with open(path, "a", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=fieldnames)
+        if write_header:
+            w.writeheader()
+        w.writerow(book)
+
+def download_image(image_url, save_dir="data/images/"):
+    try:
+        if not image_url:
+            return
+            
+        # Créer le répertoire s'il n'existe pas
+        os.makedirs(save_dir, exist_ok=True)
+        
+        # Créer le nom du fichier unique
+        filename = str(time.time()) + '-image.jpg' 
+        
+        # Chemin complet du fichier
+        file_path = os.path.join(save_dir, filename)
+        
+        # Télécharger l'image
+        response = requests.get(image_url)
+        response.raise_for_status()  # Vérifie que la requête a réussi
+        
+        # Sauvegarder l'image
+        with open(file_path, "wb") as f:
+            f.write(response.content)
+        return file_path
+        
+    except requests.RequestException as e:
+        print(f"Erreur lors du téléchargement de l'image {image_url}: {e}")
+        return None
+    except Exception as e:
+        print(f"Erreur lors de la sauvegarde de l'image: {e}")
+        return None

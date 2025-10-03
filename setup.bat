@@ -1,4 +1,5 @@
 @echo off
+rem Définir l'encodage UTF-8 pour l'affichage correct des caractères spéciaux
 chcp 65001 > nul
 echo ==========================================
 echo    Books Online Scraper - Installation
@@ -58,8 +59,8 @@ echo ✓ Dependances installees
 
 echo.
 echo [6/7] Creation des dossiers necessaires...
-if not exist "..\data" mkdir data
-if not exist "..\data\images" mkdir data\images
+if not exist "data" mkdir data
+if not exist "data\images" mkdir data\images
 echo ✓ Dossiers crees
 
 echo.
@@ -67,8 +68,8 @@ echo ==========================================
 echo     LANCEMENT DU SCRAPING COMPLET
 echo ==========================================
 echo.
-echo Cette etape va prendre environ 10 minutes...
-echo Scraping de tous les produits en cours...
+echo Cette etape va prendre environ 10-15 minutes...
+echo Scraping de tous les produits + telechargement des images...
 
 echo.
 echo [7/7] Execution scrap_all_products.py...
@@ -78,23 +79,7 @@ if errorlevel 1 (
     pause
     exit /b 1
 )
-echo ✓ Scraping termine avec succes
-
-echo.
-echo ==========================================
-echo     TELECHARGEMENT DES IMAGES
-echo ==========================================
-echo.
-echo Cette etape va prendre environ 10-12 minutes...
-echo Telechargement des images en cours...
-
-echo.
-echo [8/8] Execution download_all_images.py...
-python src\download_all_images.py
-if errorlevel 1 (
-    echo ATTENTION: Telechargement des images partiellement echoue
-    echo Les donnees CSV sont neanmoins disponibles
-)
+echo ✓ Scraping et telechargement termines avec succes
 
 echo.
 echo ==========================================
@@ -121,9 +106,6 @@ echo    .venv\Scripts\activate.bat
 echo.
 echo 💡 Pour lancer un scraping manuel:
 echo    python src\scrap_all_products.py
-echo.
-echo 💡 Pour telecharger les images:
-echo    python src\download_all_image.py
 echo.
 echo Appuyez sur une touche pour fermer...
 pause >nul
