@@ -5,9 +5,6 @@ from scrap_a_page import scrap_book
 
 
 def scrap_category(category_url, progress=None):
-    page = requests.get(category_url)
-    page.raise_for_status()
-    soup = BeautifulSoup(page.content, "html.parser")
     books_urls = []
     current_url = category_url
     
@@ -28,7 +25,8 @@ def scrap_category(category_url, progress=None):
         next_button = soup.select_one("li.next a")
         if next_button and next_button.get("href"):
             # Construire l'URL de la page suivante
-            current_url = requests.compat.urljoin(current_url, next_button["href"])
+            next_url = requests.compat.urljoin(current_url, next_button["href"])
+            current_url = next_url if next_url != current_url else None
         else:
             # Plus de page suivante, on arrête
             current_url = None
